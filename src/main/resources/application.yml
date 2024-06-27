@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: olix
+  datasource:
+    url: jdbc:postgres://localhost:5432/olix
+    username: postres
