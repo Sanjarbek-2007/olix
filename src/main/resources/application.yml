@@ -2,5 +2,19 @@ spring:
   application:
     name: olix
   datasource:
-    url: jdbc:postgres://localhost:5432/olix
-    username: postres
+    url: jdbc:postgresql://localhost:5432/olix
+    username: postgres
+    password: tplink01459520
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+
+
+secret:
+  key: ApeVFjUOyTmk7XYwgcYwIEsix1mALAsQhftYQqWHE8P6kcnqbZv0Uxj9HduKEvjXzz0sVYCG0ZjSBtmxadtAiQ==
+server:
+  port: 8081
