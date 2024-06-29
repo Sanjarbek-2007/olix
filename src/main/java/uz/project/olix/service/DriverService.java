@@ -3,10 +3,10 @@ package uz.project.olix.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.project.olix.entity.Driver;
-import uz.project.olix.repo.DriverRepository;
 
 import java.util.List;
 import java.util.Optional;
+import uz.project.olix.repositories.DriverRepository;
 
 @Service
 @AllArgsConstructor

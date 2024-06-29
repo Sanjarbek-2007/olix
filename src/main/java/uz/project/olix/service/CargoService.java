@@ -3,10 +3,10 @@ package uz.project.olix.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.project.olix.entity.Cargo;
-import uz.project.olix.repo.CargoRepository;
 
 import java.util.List;
 import java.util.Optional;
+import uz.project.olix.repositories.CargoRepository;
 
 @Service
 @AllArgsConstructor
