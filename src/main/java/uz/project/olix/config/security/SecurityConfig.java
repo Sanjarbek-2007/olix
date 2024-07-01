@@ -76,7 +76,17 @@ public class SecurityConfig {
                 .password("donOwnerPass")
                 .roles("OWNER")
                 .build();
-        return new InMemoryUserDetailsManager(adminDetails, userDetails, ownerDetails);
+        UserDetails driverDetails = User.builder()
+                .username("donDriver")
+                .password(passwordEncoder().encode("donDriverPass"))
+                .roles("DRIVER")
+                .build();
+        UserDetails customerDetails = User.builder()
+                .username("donCustomer")
+                .password(passwordEncoder().encode("donCustomerPass"))
+                .roles("CUSTOMER")
+                .build();
+        return new InMemoryUserDetailsManager(adminDetails, userDetails, ownerDetails, driverDetails, customerDetails);
     }
 
     @Bean

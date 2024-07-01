@@ -1,6 +1,7 @@
 package uz.project.olix.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.project.olix.entity.Cargo;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 import uz.project.olix.repositories.CargoRepository;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CargoService {
 
     private final CargoRepository cargoRepository;
@@ -30,7 +31,7 @@ public class CargoService {
         return cargoRepository.findById(id).map(cargo -> {
             cargo.setName(cargoDetails.getName());
             cargo.setWeight(cargoDetails.getWeight());
-            cargo.setDriver(cargoDetails.getDriver());
+            cargo.setTruck(cargoDetails.getTruck());
             return cargoRepository.save(cargo);
         });
     }

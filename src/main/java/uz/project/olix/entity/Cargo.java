@@ -26,7 +26,7 @@ public class Cargo {
     private double weight;
 
     @ManyToOne
-    @JoinColumn(name = "driver_id")
-    private Driver driver;
+    @JoinColumn(name = "truck_id")
+    private Truck truck;
 
 }
