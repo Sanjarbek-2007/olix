@@ -2,7 +2,7 @@ package uz.project.olix.dto;
 
 public record SignupDto(
         String phoneNumber,
-        String username,
+        String email,
         String fullName,
         String password
 ) {}

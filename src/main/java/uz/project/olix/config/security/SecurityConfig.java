@@ -59,35 +59,35 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails adminDetails = User.builder()
-                .username("donAdmin")
-                .password("donAdminPass")
-                .roles("ADMIN")
-                .build();
-        UserDetails userDetails = User.builder()
-                .username("donUser")
-                .password("donUserPass")
-                .roles("USER")
-                .build();
-        UserDetails ownerDetails = User.builder()
-                .username("donOwner")
-                .password("donOwnerPass")
-                .roles("OWNER")
-                .build();
-        UserDetails driverDetails = User.builder()
-                .username("donDriver")
-                .password(passwordEncoder().encode("donDriverPass"))
-                .roles("DRIVER")
-                .build();
-        UserDetails customerDetails = User.builder()
-                .username("donCustomer")
-                .password(passwordEncoder().encode("donCustomerPass"))
-                .roles("CUSTOMER")
-                .build();
-        return new InMemoryUserDetailsManager(adminDetails, userDetails, ownerDetails, driverDetails, customerDetails);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails adminDetails = User.builder()
+//                .username("donAdmin")
+//                .password("donAdminPass")
+//                .roles("ADMIN")
+//                .build();
+//        UserDetails userDetails = User.builder()
+//                .username("donUser")
+//                .password("donUserPass")
+//                .roles("USER")
+//                .build();
+//        UserDetails ownerDetails = User.builder()
+//                .username("donOwner")
+//                .password("donOwnerPass")
+//                .roles("OWNER")
+//                .build();
+//        UserDetails driverDetails = User.builder()
+//                .username("donDriver")
+//                .password(passwordEncoder().encode("donDriverPass"))
+//                .roles("DRIVER")
+//                .build();
+//        UserDetails customerDetails = User.builder()
+//                .username("donCustomer")
+//                .password(passwordEncoder().encode("donCustomerPass"))
+//                .roles("CUSTOMER")
+//                .build();
+//        return new InMemoryUserDetailsManager(adminDetails, userDetails, ownerDetails, driverDetails, customerDetails);
+//    }
 
     @Bean
     public OpenAPI openAPI() {
@@ -106,6 +106,8 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }
 
 
