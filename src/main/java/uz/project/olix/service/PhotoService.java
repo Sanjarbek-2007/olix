@@ -27,7 +27,7 @@ import uz.project.olix.repositories.PhotoRepository;
 @RequiredArgsConstructor
 public class PhotoService {
 
-    private final String[] paths = {"src/main/resources/images/profile","src/main/resources/images/documents", "src/main/resources/images/trucks"};
+    private final String[] paths = {"src/main/resources/images/profile","src/main/resources/images/documents", "src/main/resources/images/trucks","src/main/resources/images/cargos"};
     private final PhotoRepository photoRepository;
 
     public void saveUserProfilePhoto(UploadPhotoDto photoDto, Long userId) throws FileUploadFailedException {
@@ -39,7 +39,6 @@ public class PhotoService {
                     String filePath = paths[0] + fileName;
 
 
-                    // Ensure the directory exists
                     File dir = new File(paths[0]);
                     if (!dir.exists()) {
                         dir.mkdirs();
@@ -91,6 +90,38 @@ public class PhotoService {
         return photos;
     }
 
+
+    public List<Photo> saveCargoPhotos(List<MultipartFile> photoDto, Long cargoId) throws FileUploadFailedException {
+        List<Photo> photos = new ArrayList<>();
+        for (MultipartFile file : photoDto) {
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    String fileName = "Cargo-" + cargoId + "-" + file.getOriginalFilename();
+                    String filePath = paths[3] + File.separator + fileName;
+
+                    File dir = new File(paths[3]);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                    stream.write(bytes);
+                    stream.close();
+
+                    Photo photo = photoRepository.save(Photo.builder().name(fileName).path(filePath).build());
+                    photoRepository.addPhotoByPhotoIdAndCargoId(photo.getId(), cargoId);
+                    photos.add(photo);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new FileUploadFailedException("File upload failed for file: " + file.getOriginalFilename());
+                }
+            }
+        }
+        return photos;
+    }
+
+
     public ResponseEntity<Resource> getPhotoByPath(String photoPath) {
         Path imagePath = Paths.get(photoPath);
         ByteArrayResource resource;
@@ -100,10 +131,8 @@ public class PhotoService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
-        // Set appropriate content type based on file extension
         MediaType mediaType = getImageMediaType(imagePath);
 
-        // Prepare response with image data and content type
         return ResponseEntity.ok()
                 .contentType(mediaType)
                 .contentLength(resource.contentLength())

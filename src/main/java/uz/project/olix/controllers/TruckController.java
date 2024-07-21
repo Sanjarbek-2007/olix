@@ -18,34 +18,29 @@ public class TruckController {
 
     private final TruckService truckService;
 
-    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
     @GetMapping
     public List<Truck> getAllTrucks() {
         return truckService.getAllTrucks();
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
     @GetMapping("/{id}")
     public ResponseEntity<Truck> getTruckById(@PathVariable Long id) {
         Optional<Truck> truck = truckService.getTruckById(id);
         return truck.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
     @PostMapping
     public ResponseEntity<Truck> createTruck(@RequestBody Truck truck) {
         Truck savedTruck = truckService.saveTruck(truck);
         return ResponseEntity.ok(savedTruck);
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
     @PutMapping("/{id}")
     public ResponseEntity<Truck> updateTruck(@PathVariable Long id, @RequestBody Truck truckDetails) {
         Optional<Truck> updatedTruck = truckService.updateTruck(id, truckDetails);
         return updatedTruck.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTruck(@PathVariable Long id) {
         boolean isDeleted = truckService.deleteTruck(id);
