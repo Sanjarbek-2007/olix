@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,18 +28,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProfileService {
     private final UserRepository userRepository;
+    private final PhotoRepository photoRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-    private final TruckService truckService;
     private final PhotoService photoService;
 
 
-//    private final String uploadDir = "src/main/resources/profile";
-
     public ResponseEntity<User> getProfile() {
+        System.out.println("Profile" +
+                "dsdsdsds");
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("Get profile for phone number {}", phoneNumber);
         if (!phoneNumber.isBlank()) {
             User user = userRepository.findByPhoneNumber(phoneNumber).orElse(null);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -111,7 +114,7 @@ public class ProfileService {
     }
 
 
-   
+
 
 
 

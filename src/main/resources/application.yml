@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/olix
     username: postgres
-    password:
+    password: tplink01459520
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

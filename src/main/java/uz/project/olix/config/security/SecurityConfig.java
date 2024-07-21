@@ -1,5 +1,10 @@
 package uz.project.olix.config.security;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -30,6 +35,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         securedEnabled = true
 )
 @Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = "OLIX",
+                description = "This application is for monkey only",
+                version = "${app.version}",
+                contact = @Contact(
+                        name = "OLIX",
+                        url = "https://github.com/Sanjarbek-2007/olix/tree/development",
+                        email = "olix@gmail.com"
+                ),
+                license = @License(
+                        name = "Apache 3.0",
+                        url = "https://starter.spring.io"
+                ),
+                termsOfService = "https://wwww.wiki.com",
+                summary = "The project is fully supported by DS team"
+        ),
+        servers = {
+                @Server(url = "http://localhost:8081/" ,
+                        description = "Development Server"),
+        }
+)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -58,36 +85,6 @@ public class SecurityConfig {
             (AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails adminDetails = User.builder()
-//                .username("donAdmin")
-//                .password("donAdminPass")
-//                .roles("ADMIN")
-//                .build();
-//        UserDetails userDetails = User.builder()
-//                .username("donUser")
-//                .password("donUserPass")
-//                .roles("USER")
-//                .build();
-//        UserDetails ownerDetails = User.builder()
-//                .username("donOwner")
-//                .password("donOwnerPass")
-//                .roles("OWNER")
-//                .build();
-//        UserDetails driverDetails = User.builder()
-//                .username("donDriver")
-//                .password(passwordEncoder().encode("donDriverPass"))
-//                .roles("DRIVER")
-//                .build();
-//        UserDetails customerDetails = User.builder()
-//                .username("donCustomer")
-//                .password(passwordEncoder().encode("donCustomerPass"))
-//                .roles("CUSTOMER")
-//                .build();
-//        return new InMemoryUserDetailsManager(adminDetails, userDetails, ownerDetails, driverDetails, customerDetails);
-//    }
 
     @Bean
     public OpenAPI openAPI() {
