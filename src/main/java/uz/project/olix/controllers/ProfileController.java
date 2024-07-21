@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import uz.project.olix.dto.BecomeDriverDto;
 import uz.project.olix.entity.User;
 import uz.project.olix.service.ProfileService;
@@ -20,10 +21,11 @@ import uz.project.olix.service.ProfileService;
 public class ProfileController {
     private final ProfileService profileService;
 
-////    @PostMapping("/becomeDriver")
-//    public ResponseEntity<?> becomeDriver(@RequestBody BecomeDriverDto dto) {
-//        return profileService.becomeDriver(dto);
-//    }
+
+//        @PostMapping("/becomeDriver")
+//        public ResponseEntity<String> becomeDriver(@RequestBody BecomeDriverDto dto) {
+//            return profileService.becomeDriver(dto);
+//        }
 
     @GetMapping("/get")
     public ResponseEntity<User> getProfile() {
@@ -40,6 +42,22 @@ public class ProfileController {
         return profileService.editPassword(password);
     }
 
+    @PostMapping("/editEmail")
+    public ResponseEntity<User> editEmail(@RequestParam("email") String email) {
+        return profileService.editEmail(email);
+    }
+
+    @PostMapping("/editPhoneNumber")
+    public ResponseEntity<User> editPhoneNumber(@RequestParam("phoneNumber") String phoneNumber) {
+        return profileService.editPhoneNumber(phoneNumber);
+    }
+
+    @PostMapping("/uploadProfilePicture")
+    public ResponseEntity<String> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
+        return profileService.uploadProfilePicture(file);
+    }
+    }
 
 
-}
+
+

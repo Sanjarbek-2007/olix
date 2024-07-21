@@ -1,20 +1,33 @@
 spring:
+  liquibase:
+    change-log: classpath:db/changelog/db.change-log-master.xml
+    enabled: true
   application:
     name: olix
   datasource:
     url: jdbc:postgresql://localhost:5432/olix
     username: postgres
-    password: tplink01459520
+    password:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
-
-
+#liquibase:
+#  enabled: true
+#  change-log: classpath:/db/changelog/db.changelog-master.yaml
+#logging:
+#  level:
+#    liquibase: DEBUG
 
 secret:
   key: ApeVFjUOyTmk7XYwgcYwIEsix1mALAsQhftYQqWHE8P6kcnqbZv0Uxj9HduKEvjXzz0sVYCG0ZjSBtmxadtAiQ==
 server:
   port: 8081
+
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger

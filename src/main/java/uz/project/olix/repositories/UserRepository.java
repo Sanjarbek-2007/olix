@@ -35,4 +35,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query(nativeQuery = true , value = "INSERT INTO users_roles (roles_id, user_id) values ( :rId, :uId) ")
     public void setRolesToUsersById(@Param("rId") Long roleId, @Param("uId") Long userId);
+
+
+    @Modifying
+    @Query("UPDATE User u SET u.email = :email WHERE u.phoneNumber = :phoneNumber")
+    void updateEmailByPhoneNumber(String phoneNumber, String email);
+
+    @Modifying
+    @Query("UPDATE User u SET u.phoneNumber = :newPhoneNumber WHERE u.phoneNumber = :currentPhoneNumber")
+    void updatePhoneNumberByPhoneNumber(String currentPhoneNumber, String newPhoneNumber);
+
+    @Modifying
+    @Query("UPDATE User u SET u.profilePicture = :profilePicture WHERE u.phoneNumber = :phoneNumber")
+    void updateProfilePictureByPhoneNumber(String phoneNumber, String profilePicture);
 }
