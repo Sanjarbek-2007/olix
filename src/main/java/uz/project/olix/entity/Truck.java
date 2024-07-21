@@ -33,18 +33,19 @@ public class Truck {
     @OneToOne
     private User owner;
 
-    @ManyToMany
-    private List<Document> documents;
+    @OneToOne
+    private Document document;
     @ManyToMany
     private List<Photo> photo;
 
     @ManyToMany
     private List<Cargo> cargos;
 
-    public Truck(String model, User owner, String body ) {
+    public Truck(String model, User owner, String body, Document document) {
         this.model = model;
         this.owner = owner;
         this.body = body;
+        this.document = document;
         this.cargos = null;
     }
 }

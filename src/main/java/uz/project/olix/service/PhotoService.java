@@ -159,6 +159,36 @@ public class PhotoService {
         }
     }
 
+    public List<Photo> addDocumentPhotos(List<MultipartFile> multipartFiles, Long id) throws FileUploadFailedException {
+        List<Photo> photos = new ArrayList<>();
+        for (MultipartFile file : multipartFiles) {
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    String fileName = "Document-" + id + "-" + file.getOriginalFilename();
+                    String filePath = paths[0] + fileName;
+
+
+                    // Ensure the directory exists
+                    File dir = new File(paths[0]);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                    stream.write(bytes);
+                    stream.close();
+
+                    Photo photo = Photo.builder().name(fileName).path(filePath).build();
+                    photos.add(photo);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new FileUploadFailedException("File upload failed for file: " + file.getOriginalFilename());
+                }
+            }
+        }
+        return photos;
+    }
 }
 
 
