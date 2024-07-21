@@ -24,9 +24,8 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final PhotoRepository photoRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TruckRepository truckRepository;
     private final RoleRepository roleRepository;
-    private final TruckService truckService;
+
 
 
     public ResponseEntity<User> getProfile() {
@@ -60,26 +59,5 @@ public class ProfileService {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @Transactional
-    public ResponseEntity<String> becomeDriver(BecomeDriverDto dto) {
-        String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!phoneNumber.isBlank()) {
-            User user = userRepository.findByPhoneNumber(phoneNumber).get();
-            boolean existance = false;
-            for (Role role : user.getRoles()) {if (role.getName().equals("DRIVER")) {existance = true;break;}}
 
-            if (!existance) {
-                if (truckService.addTruck(dto,user)) {
-                    Role adminRole = roleRepository.findByName("DRIVER");
-                    userRepository.setRolesToUsersById(adminRole.getId(), adminRole.getId());
-                    return new ResponseEntity<>("Driver added successfully", HttpStatus.OK);
-                }
-                return new ResponseEntity<>("Problem in adding data", HttpStatus.CONFLICT);
-            }
-            return new ResponseEntity<>("Driver already exists", HttpStatus.OK);
-
-
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
 }
