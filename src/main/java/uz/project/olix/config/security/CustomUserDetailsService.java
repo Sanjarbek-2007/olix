@@ -23,8 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String phoneNum) throws UsernameNotFoundException {
-        User user = userRepository.findByPhoneNumber(phoneNum/*).or(
-                () -> userRepository.findByPhoneNumber(phoneNum)*/
+        User user = userRepository.findByPhoneNumber(phoneNum
         ).orElseThrow(
 
                 () -> new UsernameNotFoundException("User not found: "+ phoneNum));

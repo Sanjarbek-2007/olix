@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -57,6 +59,37 @@ public class PhotoService {
             }
         }
     }
+    public List<Photo> saveTruckPhoto(List<MultipartFile> photoDto, Long truckId) throws FileUploadFailedException {
+        List<Photo> photos = new ArrayList<>();
+        for (MultipartFile file : photoDto) {
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    String fileName = "Truck-" + truckId + "-" + file.getOriginalFilename();
+                    String filePath = paths[2] + fileName;
+
+
+                    // Ensure the directory exists
+                    File dir = new File(paths[2]);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+                    stream.write(bytes);
+                    stream.close();
+
+                    Photo photo = photoRepository.save(Photo.builder().name(fileName).path(filePath).build());
+                    photoRepository.addPhotoByPhotoIdAndTruckId(photo.getId(), truckId);
+                    photos.add(photo);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new FileUploadFailedException("File upload failed for file: " + file.getOriginalFilename());
+                }
+            }
+        }
+        return photos;
+    }
 
     public ResponseEntity<Resource> getPhotoByPath(String photoPath) {
         Path imagePath = Paths.get(photoPath);
@@ -77,6 +110,9 @@ public class PhotoService {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + photoPath + "\"")
                 .body(resource);
     }
+
+
+
     private MediaType getImageMediaType (Path imagePath){
         String fileName = imagePath.getFileName().toString();
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
