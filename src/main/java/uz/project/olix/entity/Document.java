@@ -32,4 +32,9 @@ public class Document {
     private User owner;
     @ManyToMany
     private List<Photo> documentPhotos;
+
+    public Document(String documentSerial, String documentType) {
+        this.documentSerial = documentSerial;
+        this.documentType = documentType;
+    }
 }
