@@ -41,6 +41,8 @@ public class Truck {
     @ManyToMany
     private List<Cargo> cargos;
 
+
+
     public Truck(String model, User owner, String body, Document document) {
         this.model = model;
         this.owner = owner;

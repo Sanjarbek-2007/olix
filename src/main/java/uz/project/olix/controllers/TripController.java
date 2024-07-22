@@ -45,4 +45,10 @@ public class TripController {
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    // New endpoint to update coordinates of ongoing trips
+    @PutMapping("/update-coordinates")
+    public ResponseEntity<Void> updateTripCoordinates() {
+        tripService.updateTripCoordinates();
+        return ResponseEntity.ok().build();
+    }
 }

@@ -42,4 +42,15 @@ public class TripService {
             return true;
         }).orElse(false);
     }
+
+    public void updateTripCoordinates() {
+        List<Trip> ongoingTrips = tripRepository.findByTripStatus_Status("In Progress");
+        ongoingTrips.forEach(trip -> {
+            trip.getDriverCoordinates().setX((float) (trip.getDriverCoordinates().getX() + 0.01));
+            trip.getDriverCoordinates().setY((float) (trip.getDriverCoordinates().getY() + 0.01));
+            tripRepository.save(trip);
+        });
+    }
+
+    
 }
