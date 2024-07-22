@@ -10,7 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TripStatus {
-    private Float x;//широта
-    private Float y;//долгота
-    private String pozitionName;//Примерное название места
+//    private Float x;//широта
+//    private Float y;//долгота
+//    private String pozitionName;//Примерное название места
+    private String status;
 }

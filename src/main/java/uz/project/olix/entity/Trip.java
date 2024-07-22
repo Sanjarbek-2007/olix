@@ -29,4 +29,6 @@ public class Trip {
     private User cargoOwner;
     @Embedded
     private TripStatus tripStatus;
+    @Embedded
+    private Coordinates driverCoordinates;
 }
