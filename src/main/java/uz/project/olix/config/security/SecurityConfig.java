@@ -68,7 +68,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
         security
                 .csrf(CsrfConfigurer::disable)
-//                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registr ->
                         registr.requestMatchers("/auth/**","/swagger-ui/**", "/v3/api-docs/**","/swagger/**","/swagger-ui.html"
                                 ).permitAll()

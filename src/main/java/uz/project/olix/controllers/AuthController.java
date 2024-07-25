@@ -1,6 +1,7 @@
 package uz.project.olix.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,13 @@ import uz.project.olix.service.AuthService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<JwtResponse> signup(@RequestBody SignupDto dto) throws UserAlreadyExistExeption {
-        System.out.println(dto.phoneNumber());
+        log.info(dto.phoneNumber());
         return authService.signup(dto);
     }
     @PostMapping("/login")

@@ -48,9 +48,6 @@ public class AuthService {
             return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
         }
         }
-
-
-
         return new ResponseEntity<>(null,HttpStatus.CONFLICT);
     }
     public JwtResponse login(LoginDto loginDto){

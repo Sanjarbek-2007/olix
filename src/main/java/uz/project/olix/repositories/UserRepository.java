@@ -48,4 +48,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.profilePicture = :profilePicture WHERE u.phoneNumber = :phoneNumber")
     void updateProfilePictureByPhoneNumber(String phoneNumber, String profilePicture);
+
+
 }
