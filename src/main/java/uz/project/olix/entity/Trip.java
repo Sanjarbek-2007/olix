@@ -27,6 +27,8 @@ public class Trip {
     private User driver;
     @ManyToOne
     private User cargoOwner;
+    private String departure;
+    private String destination;
     @Embedded
     private TripStatus tripStatus;
     @Embedded

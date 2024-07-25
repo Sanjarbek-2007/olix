@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import uz.project.olix.entity.Cargo;
 import uz.project.olix.entity.Truck;
 import uz.project.olix.service.TruckService;
 
@@ -45,5 +46,9 @@ public class TruckController {
     public ResponseEntity<Void> deleteTruck(@PathVariable Long id) {
         boolean isDeleted = truckService.deleteTruck(id);
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+    @PostMapping("/uploadCargo")
+    public ResponseEntity<List<Cargo>> uploadCargo(@RequestBody UploadCargoDto dto) {
+        return truckService.uploadCargo(dto);
     }
 }
