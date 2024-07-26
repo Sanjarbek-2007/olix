@@ -1,9 +1,6 @@
 package uz.project.olix.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import javax.swing.JButton;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import uz.project.olix.controllers.UploadCargoDto;
+import uz.project.olix.dto.UploadCargoDto;
 import uz.project.olix.dto.BecomeDriverDto;
-import uz.project.olix.dto.RemoveCargoDto;
-import uz.project.olix.dto.UploadPhotoDto;
 import uz.project.olix.entity.Cargo;
 import uz.project.olix.entity.Document;
 import uz.project.olix.entity.Photo;
@@ -25,7 +20,6 @@ import uz.project.olix.entity.User;
 import uz.project.olix.exeptions.FileUploadFailedException;
 import uz.project.olix.repositories.CargoRepository;
 import uz.project.olix.repositories.TruckRepository;
-import uz.project.olix.repositories.UserRepository;
 
 @Service
 @RequiredArgsConstructor

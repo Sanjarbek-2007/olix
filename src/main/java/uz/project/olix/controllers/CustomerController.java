@@ -17,14 +17,8 @@ public class CustomerController {
 
     @PostMapping("/become")
     public ResponseEntity<String> becomeCustomer(
-            @RequestParam("userId") Long userId,
-            @RequestParam("documentSerial") String documentSerial,
-            @RequestParam("documentType") String documentType,
-            @RequestParam("documentPhotos") List<MultipartFile> documentPhotos) {
+            @ModelAttribute BecomeCustomerDto dto) {
+        return customerService.becomeCustomer(dto);
 
-        BecomeCustomerDto dto = new BecomeCustomerDto(documentSerial, documentType, documentPhotos);
-        customerService.becomeCustomer(userId, dto);
-
-        return ResponseEntity.ok("Customer registration successful");
     }
 }

@@ -1,10 +1,9 @@
 package uz.project.olix.controllers;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import uz.project.olix.dto.UploadCargoDto;
 import uz.project.olix.entity.Cargo;
 import uz.project.olix.entity.Truck;
 import uz.project.olix.service.TruckService;
