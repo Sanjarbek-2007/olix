@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import uz.project.olix.dto.BecomeDriverDto;
+import uz.project.olix.entity.Photo;
 import uz.project.olix.entity.User;
 import uz.project.olix.service.ProfileService;
 
@@ -30,6 +31,11 @@ public class ProfileController {
     @GetMapping("/get")
     public ResponseEntity<User> getProfile() {
         return profileService.getProfile();
+    }
+
+    @GetMapping("/profilePhoto")
+    public ResponseEntity<Photo> getProfilePhoto() {
+        return profileService.getProfilePhoto();
     }
 
     @PostMapping("/editFullname")
@@ -56,7 +62,7 @@ public class ProfileController {
     public ResponseEntity<String> uploadProfilePicture(@RequestParam("file") MultipartFile file) {
         return profileService.uploadProfilePicture(file);
     }
-    }
+}
 
 
 

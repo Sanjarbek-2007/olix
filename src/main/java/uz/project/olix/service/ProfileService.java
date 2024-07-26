@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.project.olix.dto.BecomeDriverDto;
 import uz.project.olix.dto.UploadPhotoDto;
+import uz.project.olix.entity.Photo;
 import uz.project.olix.entity.Role;
 import uz.project.olix.entity.Truck;
 import uz.project.olix.entity.User;
@@ -38,8 +39,7 @@ public class ProfileService {
 
 
     public ResponseEntity<User> getProfile() {
-        System.out.println("Profile" +
-                "dsdsdsds");
+
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
         log.info("Get profile for phone number {}", phoneNumber);
         if (!phoneNumber.isBlank()) {
@@ -100,10 +100,10 @@ public class ProfileService {
             try {
                 UploadPhotoDto photoDto = new UploadPhotoDto(List.of(file));
                 Long userId = userRepository.findByPhoneNumber(phoneNumber).get().getId();
-                photoService.saveUserProfilePhoto(photoDto, userId);
+                List<Photo> photos = photoService.saveUserProfilePhoto(photoDto, userId);
 
-                String fileName = "Profile-" + userId + "-" + file.getOriginalFilename();
-                userRepository.updateProfilePictureByPhoneNumber(phoneNumber, fileName);
+                log.info(photos.get(0).getPath() + " Is  now added to database");
+                userRepository.updateProfilePictureByPhoneNumber(phoneNumber, photos.get(0).getPath());
 
                 return new ResponseEntity<>("Profile picture uploaded successfully", HttpStatus.OK);
             } catch (FileUploadFailedException e) {
@@ -114,9 +114,17 @@ public class ProfileService {
     }
 
 
+    public ResponseEntity<Photo> getProfilePhoto() {
+        String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        if (!phoneNumber.isBlank()) {
+            User user = userRepository.findByPhoneNumber(phoneNumber).orElse(null);
+            List<Photo> profilePhotos = user.getProfilePhotos();
+            if (!profilePhotos.isEmpty()) {
 
-
-
-
+                return new ResponseEntity<>(profilePhotos.get(0), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 }

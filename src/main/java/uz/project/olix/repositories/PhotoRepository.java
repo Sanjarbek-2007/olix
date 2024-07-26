@@ -10,7 +10,7 @@ import uz.project.olix.entity.Photo;
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO user_profile_photos (user_id, profile_photos_id) values( :userId, :id )")
+    @Query(nativeQuery = true, value = "INSERT INTO users_profile_photos (user_id, profile_photos_id) values( :userId, :id )")
     void addPhotoByPhotoIdAndUserId(Long id, Long userId);
 
     @Transactional
@@ -19,6 +19,6 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     void addPhotoByPhotoIdAndTruckId(Long photoId, Long truckId);
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "INSERT INTO cargo_photo (cargo_id, photo_id) values( :cargoId, :photoId )")
+    @Query(nativeQuery = true, value = "INSERT INTO cargo_photos (cargo_id, photos_id) values( :cargoId, :photoId )")
     void addPhotoByPhotoIdAndCargoId(Long photoId, Long cargoId);
 }

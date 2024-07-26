@@ -27,10 +27,11 @@ import uz.project.olix.repositories.PhotoRepository;
 @RequiredArgsConstructor
 public class PhotoService {
 
-    private final String[] paths = {"src/main/resources/images/profile","src/main/resources/images/documents", "src/main/resources/images/trucks","src/main/resources/images/cargos"};
+    private final String[] paths = {"src/main/resources/images/profile/","src/main/resources/images/documents/", "src/main/resources/images/trucks/","src/main/resources/images/cargos/"};
     private final PhotoRepository photoRepository;
 
-    public void saveUserProfilePhoto(UploadPhotoDto photoDto, Long userId) throws FileUploadFailedException {
+    public List<Photo> saveUserProfilePhoto(UploadPhotoDto photoDto, Long userId) throws FileUploadFailedException {
+        List<Photo> photos = new ArrayList<>();
         for (MultipartFile file : photoDto.files()) {
             if (!file.isEmpty()) {
                 try {
@@ -50,13 +51,14 @@ public class PhotoService {
 
                     Photo photo = photoRepository.save(Photo.builder().name(fileName).path(filePath).build());
                     photoRepository.addPhotoByPhotoIdAndUserId(photo.getId(), userId);
-
+                    photos.add(photo);
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw new FileUploadFailedException("File upload failed for file: " + file.getOriginalFilename());
                 }
             }
         }
+        return photos;
     }
     public List<Photo> saveTruckPhoto(List<MultipartFile> photoDto, Long truckId) throws FileUploadFailedException {
         List<Photo> photos = new ArrayList<>();

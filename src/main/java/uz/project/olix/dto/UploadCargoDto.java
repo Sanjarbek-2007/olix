@@ -1,4 +1,4 @@
-package uz.project.olix.controllers;
+package uz.project.olix.dto;
 
 import java.util.List;
 

@@ -28,7 +28,5 @@ public class Photo {
     private String path;
     private String name;
     private String source;
-    @ManyToOne
-    @JoinColumn(name = "cargo_id")
-    private Cargo cargo;
+
 }
