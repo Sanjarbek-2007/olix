@@ -10,12 +10,12 @@ import uz.project.olix.service.CustomerService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
 
-    @PostMapping("/become")
+    @PostMapping("/become/customer")
     public ResponseEntity<String> becomeCustomer(
             @ModelAttribute BecomeCustomerDto dto) {
         return customerService.becomeCustomer(dto);
