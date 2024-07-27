@@ -51,7 +51,7 @@ public class Truck {
         this.cargos = null;
     }
 
-    public Truck(String model, User user, String body, Document technicalPassport, String carNum) {
+    public Truck(String model, User owner, String body, Document document, String carNum) {
         this.model = model;
         this.owner = owner;
         this.body = body;

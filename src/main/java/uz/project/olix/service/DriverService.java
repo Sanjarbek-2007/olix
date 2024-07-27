@@ -1,6 +1,8 @@
 package uz.project.olix.service;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,7 @@ import uz.project.olix.repositories.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class DriverService {
+    private static final Logger log = LoggerFactory.getLogger(DriverService.class);
     private final DocumentService documentService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -33,7 +36,8 @@ public class DriverService {
             if (!existance) {
                 if (truckService.addTruck(dto,user)) {
                     Role adminRole = roleRepository.findByName("DRIVER");
-                    userRepository.setRolesToUsersById(adminRole.getId(), adminRole.getId());
+                    log.info(adminRole.getName()+" has been added to the user");
+                    userRepository.setRolesToUsersById(adminRole.getId(),adminRole.getId());
                     return new ResponseEntity<>("Driver added successfully", HttpStatus.OK);
                 }
                 return new ResponseEntity<>("Problem in adding data", HttpStatus.CONFLICT);

@@ -70,8 +70,7 @@ public class TruckService {
             documentRepository.setDocsToTrucksById(truck.getId(),technicalPassport.getId());
             try {
                 List<Photo> photos = photoService.saveTruckPhoto(dto.photos(), truck.getId());
-                if (!photos.isEmpty()) return false;
-                return true;
+                return !photos.isEmpty();
             } catch (FileUploadFailedException e) {
                 throw new RuntimeException(e);
             }
