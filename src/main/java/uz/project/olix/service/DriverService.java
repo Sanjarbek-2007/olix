@@ -23,10 +23,10 @@ public class DriverService {
     private final TruckService truckService;
 
     public ResponseEntity<?> become(BecomeDriverDto dto) {
-        Document drivingLicence = documentService.addDocument(new Document(dto.drivingLicenceSerialNumber(), "Driving Licence"), dto.driverLicence());
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!phoneNumber.isBlank()) {
             User user = userRepository.findByPhoneNumber(phoneNumber).get();
+            Document drivingLicence = documentService.addDocument(new Document(dto.drivingLicenceSerialNumber(), "Driving Licence",user ), dto.driverLicence());
             boolean existance = false;
             for (Role role : user.getRoles()) {if (role.getName().equals("DRIVER")) {existance = true;break;}}
 

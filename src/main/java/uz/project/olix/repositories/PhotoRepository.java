@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uz.project.olix.entity.Photo;
 @Repository
@@ -12,6 +13,11 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO users_profile_photos (user_id, profile_photos_id) values( :userId, :id )")
     void addPhotoByPhotoIdAndUserId(Long id, Long userId);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO document_document_photos (document_id, document_photos_id) values( :docId, :photoId )")
+    void addPhotoByDocumentIdAndPhotoId(@Param("docId") Long docId, @Param("photoId")Long photoId);
 
     @Transactional
     @Modifying

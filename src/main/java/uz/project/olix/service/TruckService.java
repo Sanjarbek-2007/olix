@@ -19,6 +19,7 @@ import uz.project.olix.entity.Truck;
 import uz.project.olix.entity.User;
 import uz.project.olix.exeptions.FileUploadFailedException;
 import uz.project.olix.repositories.CargoRepository;
+import uz.project.olix.repositories.DocumentRepository;
 import uz.project.olix.repositories.TruckRepository;
 
 @Service
@@ -30,6 +31,7 @@ public class TruckService {
     private final DocumentService documentService;
     private final CargoService cargoService;
     private final CargoRepository cargoRepository;
+    private final DocumentRepository documentRepository;
 
     public List<Truck> getAllTrucks() {
         return truckRepository.findAll();
@@ -61,10 +63,11 @@ public class TruckService {
     }
 
     public boolean addTruck(BecomeDriverDto dto, User user) {
-        if (dto.carNum().isEmpty()) {
+        if (!dto.carNum().isEmpty()) {
 
-            Document technicalPassport = documentService.addDocument(new Document(dto.drivingLicenceSerialNumber(), "Technical Passport"), dto.carDocs());
-            Truck truck = truckRepository.save(new Truck(dto.model(), user, dto.body(), technicalPassport));
+            Document technicalPassport = documentService.addDocument(new Document(dto.drivingLicenceSerialNumber(), "Technical Passport", user), dto.carDocs());
+            Truck truck = truckRepository.save(new Truck(dto.model(), user, dto.body(), technicalPassport, dto.carNum()));
+            documentRepository.setDocsToTrucksById(truck.getId(),technicalPassport.getId());
             try {
                 List<Photo> photos = photoService.saveTruckPhoto(dto.photos(), truck.getId());
                 if (!photos.isEmpty()) return false;

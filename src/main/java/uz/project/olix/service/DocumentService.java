@@ -20,7 +20,7 @@ public class DocumentService {
         List<Photo> photos = new ArrayList<>();
         try {
             photos = photoService.addDocumentPhotos(multipartFiles, document.getId());
-            document.setDocumentPhotos(photos);
+//            documentRepository.setDocsToUsersById(document.getOwner().getId(), document.getId());
         } catch (FileUploadFailedException e) {
             throw new RuntimeException(e);
         }

@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ import uz.project.olix.repositories.PhotoRepository;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PhotoService {
 
     private final String[] paths = {"src/main/resources/images/profile/","src/main/resources/images/documents/", "src/main/resources/images/trucks/","src/main/resources/images/cargos/"};
@@ -168,11 +170,11 @@ public class PhotoService {
                 try {
                     byte[] bytes = file.getBytes();
                     String fileName = "Document-" + id + "-" + file.getOriginalFilename();
-                    String filePath = paths[0] + fileName;
+                    String filePath = paths[1] + fileName;
 
 
                     // Ensure the directory exists
-                    File dir = new File(paths[0]);
+                    File dir = new File(paths[1]);
                     if (!dir.exists()) {
                         dir.mkdirs();
                     }
@@ -181,8 +183,12 @@ public class PhotoService {
                     stream.write(bytes);
                     stream.close();
 
-                    Photo photo = Photo.builder().name(fileName).path(filePath).build();
+
+                    Photo photo = photoRepository.save(Photo.builder().name(fileName).path(filePath).build());
                     photos.add(photo);
+
+                    log.info("Photo with id: "+photo.getId()+" is attenpting to be added to the database");
+                    photoRepository.addPhotoByDocumentIdAndPhotoId(id, photo.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw new FileUploadFailedException("File upload failed for file: " + file.getOriginalFilename());

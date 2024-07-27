@@ -69,7 +69,8 @@ public class SecurityConfig {
         security
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(registr ->
-                        registr.requestMatchers("/auth/**","/swagger-ui/**", "/v3/api-docs/**","/swagger/**","/swagger-ui.html","/photo/**"
+                        registr.requestMatchers("/auth/**","/swagger-ui/**", "/v3/api-docs/**",
+                                        "/swagger/**","/swagger-ui.html","/photo/**","/trucks/**"
                                 ).permitAll()
 //                                .requestMatchers("/posts/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()

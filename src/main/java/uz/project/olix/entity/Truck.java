@@ -50,4 +50,13 @@ public class Truck {
         this.document = document;
         this.cargos = null;
     }
+
+    public Truck(String model, User user, String body, Document technicalPassport, String carNum) {
+        this.model = model;
+        this.owner = owner;
+        this.body = body;
+        this.document = document;
+        this.number = carNum;
+        this.cargos = null;
+    }
 }
