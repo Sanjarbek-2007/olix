@@ -49,7 +49,6 @@ public class TruckService {
         return truckRepository.findById(id).map(truck -> {
             truck.setModel(truckDetails.getModel());
             truck.setOwner(truckDetails.getOwner());
-//            truck.setTechnicalPassport(truckDetails.getTechnicalPassport());
             truck.setCargos(truckDetails.getCargos());
             return truckRepository.save(truck);
         });
@@ -64,20 +63,19 @@ public class TruckService {
 
     public boolean addTruck(BecomeDriverDto dto, User user) {
         if (!dto.carNum().isEmpty()) {
-
             Document technicalPassport = documentService.addDocument(new Document(dto.drivingLicenceSerialNumber(), "Technical Passport", user), dto.carDocs());
             Truck truck = truckRepository.save(new Truck(dto.model(), user, dto.body(), technicalPassport, dto.carNum()));
-            documentRepository.setDocsToTrucksById(truck.getId(),technicalPassport.getId());
+            documentRepository.setDocsToTrucksById(truck.getId(), technicalPassport.getId());
             try {
                 List<Photo> photos = photoService.saveTruckPhoto(dto.photos(), truck.getId());
-                if (!photos.isEmpty()) return false;
-                return true;
+                if (!photos.isEmpty()) {
+                    return true;  // Photos added successfully
+                }
             } catch (FileUploadFailedException e) {
                 throw new RuntimeException(e);
             }
         }
-
-        return false;
+        return false;  // Return false if carNum is empty or photos are not added successfully
     }
 
     public ResponseEntity<List<Cargo>> uploadCargo(UploadCargoDto dto) {
@@ -95,5 +93,9 @@ public class TruckService {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-//    public ResponseEntity<?> removeCargo(RemoveCargoDto dto) {}
+
+    public ResponseEntity<List<Truck>> getAllTrucksByUser() {
+        String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new ResponseEntity<>(truckRepository.findAllByOwner_PhoneNumber(phoneNumber), HttpStatus.OK);
+    }
 }

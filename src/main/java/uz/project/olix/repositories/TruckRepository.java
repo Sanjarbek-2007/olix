@@ -1,6 +1,8 @@
 package uz.project.olix.repositories;
 
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,5 +30,6 @@ public interface TruckRepository extends JpaRepository<Truck, Long> {
 
     Truck findByOwner_PhoneNumber(String phoneNumber);
 
+    List<Truck> findAllByOwner_PhoneNumber(String phoneNumber);
 
 }

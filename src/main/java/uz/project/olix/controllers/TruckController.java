@@ -28,6 +28,10 @@ public class TruckController {
         Optional<Truck> truck = truckService.getTruckById(id);
         return truck.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @GetMapping("/my")
+    public ResponseEntity<List<Truck>> getAllTrucksByUserId() {
+        return truckService.getAllTrucksByUser();
+    }
 
     @PostMapping
     public ResponseEntity<Truck> createTruck(@RequestBody Truck truck) {
