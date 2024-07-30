@@ -12,7 +12,7 @@ import uz.project.olix.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-//    Optional<User> findByUsername(String username);
+    //    Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String username);
 
     Optional<User> findByPhoneNumber(String phoneNumber);
@@ -33,8 +33,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true , value = "INSERT INTO users_roles (roles_id, user_id) values ( :rId, :uId) ")
-    void setRolesToUsersById(@Param("rId") Long roleId, @Param("uId") Long userId);
+    @Query(nativeQuery = true , value = "INSERT INTO users_roles (user_id, roles_id ) values ( :userId, :roleId) ")
+    public void setRolesToUsersById(@Param("userId") Long userId, @Param("roleId") Long roleId);
 
 
     @Modifying

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- ChangeSet for inserting roles -->
+    <changeSet id="1" author="yournamasdsadasfdszscase">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM role WHERE name = 'USER';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO role (name)
+            VALUES
+                ('ADMIN'),
+                ('USER'),
+                ('OWNER'),
+                ('DRIVER'),
+                ('CUSTOMER'),
+                ('MODERATOR');
+        </sql>
+    </changeSet>
+
+    <!-- ChangeSet for inserting users -->
+    <changeSet id="2" author="yournameeeeeeeeeeeeeeeeeeeasddsad">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM users WHERE phone_number IN ('+998943607561', '+998974903007');
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO users (full_name, password, phone_number, username, email)
+            VALUES
+                ('Sanjarbek Yuldashev', '1234olix', '+998943607561', 'Yuldashevvv_', 'ineedhotalot@gmail.com'),
+                ('Doniyorbek Xudayarov', '$2a$10$esTTsR22MPPH0A1R//HoIujjDYGKbcNkz0JHyiGWGEbjJxadZhBqu', '+998974903007', 'BeCool', 'doniyorkhudayarov@gmail.com');
+        </sql>
+    </changeSet>
+
+    <!--     ChangeSet for creating findUserByPhoneNumber function-->
+    <!--    <changeSet id="3" author="yournameeeeeeeeeeeee">-->
+    <!--        <sql>-->
+    <!--            CREATE OR REPLACE FUNCTION findUserByPhoneNumber(p_phone_number VARCHAR)-->
+    <!--            RETURNS INTEGER-->
+    <!--            LANGUAGE plpgsql-->
+    <!--            AS $$-->
+    <!--            DECLARE-->
+    <!--            v_user_id INTEGER;-->
+    <!--            BEGIN-->
+    <!--            SELECT id INTO v_user_id FROM users WHERE phone_number = p_phone_number LIMIT 1;-->
+    <!--            RETURN v_user_id;-->
+    <!--            END;-->
+    <!--            $$;-->
+    <!--        </sql>-->
+    <!--    </changeSet>-->
+
+    <!--    &lt;!&ndash; ChangeSet for creating findRoleByName function &ndash;&gt;-->
+    <!--    <changeSet id="4" author="yournasdfdscxme">-->
+    <!--        <sql>-->
+    <!--            CREATE OR REPLACE FUNCTION findRoleByName(n_name VARCHAR)-->
+    <!--            RETURNS INTEGER-->
+    <!--            LANGUAGE plpgsql-->
+    <!--            AS $$-->
+    <!--            DECLARE-->
+    <!--            v_role_id INTEGER;-->
+    <!--            BEGIN-->
+    <!--            SELECT id INTO v_role_id FROM role WHERE name = n_name LIMIT 1;-->
+    <!--            RETURN v_role_id;-->
+    <!--            END;-->
+    <!--            $$;-->
+    <!--        </sql>-->
+    <!--    </changeSet>-->
+
+    <!-- ChangeSet for inserting into users_roles -->
+    <changeSet id="5" author="yournacxzcxzcxzcme">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM users_roles WHERE user_id = findUserByPhoneNumber('+998943607561') AND roles_id = findRoleByName('ADMIN');
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO users_roles (user_id, roles_id)
+            VALUES
+--                 (findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'ADMIN')),
+--                 (findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'OWNER')),
+(findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'USER')),
+(findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'ADMIN')),
+(findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'OWNER')),
+(findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'USER'));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
