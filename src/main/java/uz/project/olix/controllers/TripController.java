@@ -1,8 +1,11 @@
 package uz.project.olix.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.project.olix.dto.StartTripDto;
 import uz.project.olix.entity.Trip;
 import uz.project.olix.service.TripService;
 
@@ -14,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TripController {
 
+    private static final Logger log = LoggerFactory.getLogger(TripController.class);
     private final TripService tripService;
 
     @GetMapping
@@ -27,11 +31,10 @@ public class TripController {
         return trip.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) {
-
-        Trip savedTrip = tripService.saveTrip(trip);
-        return ResponseEntity.ok(savedTrip);
+    @PostMapping("/add")
+    public ResponseEntity<Trip> createTrip(@ModelAttribute StartTripDto dto) {
+        log.info("adding a trip from " +dto.departure()+ " to " +dto.destination());
+        return  tripService.saveTrip(dto);
     }
 
     @PutMapping("/{id}")
@@ -46,10 +49,10 @@ public class TripController {
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // New endpoint to update coordinates of ongoing trips
-    @PutMapping("/update-coordinates")
-    public ResponseEntity<Void> updateTripCoordinates() {
-        tripService.updateTripCoordinates();
-        return ResponseEntity.ok().build();
-    }
+//     New endpoint to update coordinates of ongoing trips
+//    @PutMapping("/update-coordinates")
+//    public ResponseEntity<Void> updateTripCoordinates() {
+//        tripService.updateTripCoordinates();
+//        return ResponseEntity.ok().build();
+//    }
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Trip {
@@ -27,10 +29,16 @@ public class Trip {
     private User driver;
     @ManyToOne
     private User cargoOwner;
+//    @ManyToOne
+//    private City departure;
+//    @ManyToOne
+//    private City destination;
+
     private String departure;
+
     private String destination;
-    @Embedded
-    private TripStatus tripStatus;
+
+    private String tripStatus;
     @Embedded
     private Coordinates driverCoordinates;
 
