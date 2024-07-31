@@ -12,4 +12,9 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     @Modifying
     @Query(nativeQuery = true , value = "INSERT INTO truck_documents (truck_id, documents_id) values ( :truckId, :docId) ")
     public void setDocsToTrucksById(@Param("truckId") Long truckId, @Param("docId") Long docId);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Document d WHERE d.owner.id = :userId")
+    void deleteByOwnerId(@Param("userId") Long userId);
 }

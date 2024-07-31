@@ -26,6 +26,14 @@ public interface CargoRepository extends JpaRepository<Cargo, Long> {
     @Query(nativeQuery = true , value = "update cargo set owner_id = :ownerId where id = :id;")
     int updateOwnerById(@Param("ownerId") Long ownerId, @Param("id") Long id);
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Cargo c WHERE c.truck.id = :truckId")
+    void deleteByTruckId(@Param("truckId") Long truckId);
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Cargo c WHERE c.owner.id = :userId")
+    void deleteByOwnerId(@Param("userId") Long userId);
 
 }

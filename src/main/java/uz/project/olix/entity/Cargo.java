@@ -36,6 +36,10 @@ public class Cargo {
     @ManyToOne
     private User owner;
 
+    @ManyToOne
+    @JoinColumn(name = "truck_id")
+    private Truck truck;
+
     @ManyToMany
     private List<Photo> photos;
 
