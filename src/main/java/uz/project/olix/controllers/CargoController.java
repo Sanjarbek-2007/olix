@@ -1,19 +1,23 @@
 package uz.project.olix.controllers;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
-import uz.project.olix.dto.BecomeCargoDto;
-import uz.project.olix.entity.Cargo;
-import uz.project.olix.entity.Photo;
-import uz.project.olix.entity.Truck;
-import uz.project.olix.entity.User;
-import uz.project.olix.service.CargoService;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import uz.project.olix.dto.AddCargoDto;
+import uz.project.olix.entity.Cargo;
+import uz.project.olix.entity.Photo;
+import uz.project.olix.service.CargoService;
 
 @RestController
 @RequestMapping("/cargos")
@@ -27,6 +31,10 @@ public class CargoController {
     public List<Cargo> getAllCargos() {
         return cargoService.getAllCargos();
     }
+    @GetMapping("/my")
+    public List<Cargo> getAllCargosByOwner() {
+        return cargoService.getAllCargosByOwner();
+    }
 
 
     @GetMapping("/{id}")
@@ -35,8 +43,8 @@ public class CargoController {
         return cargo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Cargo> createCargo(@RequestBody Cargo cargo) {
+    @PostMapping("/add")
+    public ResponseEntity<Cargo> createCargo(@ModelAttribute AddCargoDto cargo) {
         Cargo savedCargo = cargoService.saveCargo(cargo);
         return ResponseEntity.ok(savedCargo);
     }
@@ -49,7 +57,7 @@ public class CargoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCargo(@PathVariable Long id) {
-        boolean isDeleted = cargoService.deleteCargo(id);
+        boolean isDeleted = cargoService.deleteCargo(id) ;
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
@@ -62,24 +70,14 @@ public class CargoController {
     public List<Cargo> getCargoByWeight(@RequestParam double minWeight, @RequestParam double maxWeight) {
         return cargoService.getCargoByWeight(minWeight, maxWeight);
     }
+//
+//    @GetMapping("/truck/{truckId}")
+//    public List<Cargo> getCargoByTruck(@PathVariable Long truckId) {
+//        Truck truck = new Truck();
+//        truck.setId(truckId);
+//        return cargoService.getCargoByTruck(truck);
+//    }
 
-    @GetMapping("/truck/{truckId}")
-    public List<Cargo> getCargoByTruck(@PathVariable Long truckId) {
-        Truck truck = new Truck();
-        truck.setId(truckId);
-        return cargoService.getCargoByTruck(truck);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<Void> addCargo(@RequestBody BecomeCargoDto dto, @RequestParam Long truckId, @RequestParam Long userId) {
-        Truck truck = new Truck();
-        truck.setId(truckId);
-        User user = new User();
-        user.setId(userId);
-
-        boolean isAdded = cargoService.addCargo(dto, user, truck);
-        return isAdded ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
-    }
 
     @GetMapping("/user/{userId}")
     public List<Cargo> getCargoByUser(@PathVariable Long userId) {

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uz.project.olix.dto.AddingSuccess;
 import uz.project.olix.dto.BecomeCustomerDto;
 import uz.project.olix.entity.Document;
 import uz.project.olix.entity.Role;
@@ -24,8 +25,8 @@ public class CustomerService {
     private final DocumentService documentService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
-    public ResponseEntity<String> becomeCustomer(BecomeCustomerDto becomeCustomerDto) {
+    private final AuthService authService;
+    public ResponseEntity<?> becomeCustomer(BecomeCustomerDto becomeCustomerDto) {
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
         logger.info("Attempting to find user by phone number: {}", phoneNumber);
         User user = userRepository.findByPhoneNumber(phoneNumber)
@@ -53,6 +54,8 @@ public class CustomerService {
         logger.info("Assigning role 'CUSTOMER' to user: {}", user.getId());
         userRepository.setRolesToUsersById(user.getId(), customerRole.getId());
 
-        return new ResponseEntity<>("Successfully applied for being customer", HttpStatus.OK);
+        return new ResponseEntity<>(
+                new AddingSuccess("Successfully added ",authService.refreshToken(user))
+                , HttpStatus.OK);
     }
 }

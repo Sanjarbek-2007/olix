@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.project.olix.dto.UploadPhotoDto;
+import uz.project.olix.entity.Cargo;
 import uz.project.olix.entity.Photo;
 import uz.project.olix.exeptions.FileUploadFailedException;
 import uz.project.olix.repositories.PhotoRepository;
@@ -29,7 +30,11 @@ import uz.project.olix.repositories.PhotoRepository;
 @Slf4j
 public class PhotoService {
 
-    private final String[] paths = {"src/main/resources/images/profile/","src/main/resources/images/documents/", "src/main/resources/images/trucks/","src/main/resources/images/cargos/"};
+    private final String[] paths =
+            {"src/main/resources/images/profile/",
+            "src/main/resources/images/documents/",
+            "src/main/resources/images/trucks/",
+            "src/main/resources/images/cargos/"};
     private final PhotoRepository photoRepository;
 
     public List<Photo> saveUserProfilePhoto(UploadPhotoDto photoDto, Long userId) throws FileUploadFailedException {
@@ -102,7 +107,7 @@ public class PhotoService {
                 try {
                     byte[] bytes = file.getBytes();
                     String fileName = "Cargo-" + cargoId + "-" + file.getOriginalFilename();
-                    String filePath = paths[3] + File.separator + fileName;
+                    String filePath = paths[3]  + fileName;
 
                     File dir = new File(paths[3]);
                     if (!dir.exists()) {
@@ -125,7 +130,23 @@ public class PhotoService {
         return photos;
     }
 
-
+    public boolean deletePhotos(List<Photo> photos, Cargo cargo) {
+        for (Photo photo : photos) {
+            photoRepository.deleteByCargoId(cargo.getId());
+            photoRepository.deleteById(photo.getId());
+            File file = new File(photo.getPath());
+            if (file.exists()) {
+                if (file.delete()) {
+                    log.info("File deleted successfully - photo: " + photo.getPath());
+                } else {
+                    log.info("Failed to delete the file");
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
     public ResponseEntity<Resource> getPhotoByPath(String photoPath) {
         Path imagePath = Paths.get(photoPath);
         ByteArrayResource resource;

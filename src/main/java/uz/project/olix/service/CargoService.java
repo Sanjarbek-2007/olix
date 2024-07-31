@@ -1,20 +1,17 @@
 package uz.project.olix.service;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import uz.project.olix.dto.BecomeCargoDto;
-import uz.project.olix.entity.Cargo;
-
 import java.util.List;
 import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import uz.project.olix.dto.AddCargoDto;
+import uz.project.olix.entity.Cargo;
 import uz.project.olix.entity.Photo;
-import uz.project.olix.entity.Truck;
 import uz.project.olix.entity.User;
 import uz.project.olix.exeptions.FileUploadFailedException;
 import uz.project.olix.repositories.CargoRepository;
-import uz.project.olix.repositories.PhotoRepository;
+import uz.project.olix.repositories.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +19,7 @@ public class CargoService {
 
     private final CargoRepository cargoRepository;
     private final PhotoService photoService;
+    private final UserRepository userRepository;
 
     public List<Cargo> getAllCargos() {
         return cargoRepository.findAll();
@@ -31,24 +29,51 @@ public class CargoService {
         return cargoRepository.findById(id);
     }
 
-    public Cargo saveCargo(Cargo cargo) {
-        return cargoRepository.save(cargo);
+    public Cargo saveCargo(AddCargoDto cargo) {
+        // Retrieve the phone number of the authenticated user
+        String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Fetch the user entity using the phone number
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Create a new Cargo entity using the provided data
+//        Cargo cargoEntity = new Cargo(cargo.name(), cargo.weight(), cargo.status());
+Cargo cargoEntity = new Cargo(cargo.name(),cargo.status() , user, cargo.weight());
+
+        // Save the Cargo entity to the repository
+        Cargo savedCargo = cargoRepository.save(cargoEntity);
+
+        // Update the owner of the saved cargo to be the authenticated user
+//        cargoRepository.updateOwnerById(user.getId(), savedCargo.getId());
+
+        // Save the photos associated with the cargo
+        try {
+            photoService.saveCargoPhotos(cargo.photos(), savedCargo.getId());
+        } catch (FileUploadFailedException e) {
+            // Handle the exception as needed
+            throw new RuntimeException("Failed to upload photos", e);
+        }
+
+        return savedCargo;
     }
 
     public Optional<Cargo> updateCargo(Long id, Cargo cargoDetails) {
         return cargoRepository.findById(id).map(cargo -> {
             cargo.setName(cargoDetails.getName());
             cargo.setWeight(cargoDetails.getWeight());
-            cargo.setTruck(cargoDetails.getTruck());
             return cargoRepository.save(cargo);
         });
     }
 
     public boolean deleteCargo(Long id) {
         return cargoRepository.findById(id).map(cargo -> {
+
+            photoService.deletePhotos(cargo.getPhotos(),cargo);
             cargoRepository.delete(cargo);
             return true;
         }).orElse(false);
+
     }
 
     public List<Cargo> getCargoByName(String name) {
@@ -59,31 +84,8 @@ public class CargoService {
         return cargoRepository.findByWeightBetween(minWeight, maxWeight);
     }
 
-    public List<Cargo> getCargoByTruck(Truck truck) {
-        return cargoRepository.findByTruck(truck);
-    }
 
-    public boolean addCargo(BecomeCargoDto dto, User user, Truck truck) {
-        if (dto.getName() != null && dto.getWeight() > 0) {
-            Cargo cargo = new Cargo();
-            cargo.setName(dto.getName());
-            cargo.setWeight(dto.getWeight());
-            cargo.setTruck(truck);
-            cargo.setOwner(user);
-            Cargo savedCargo = cargoRepository.save(cargo);
 
-            try {
-                List<Photo> photos = photoService.saveCargoPhotos(dto.getPhotos(), savedCargo.getId());
-                if (!photos.isEmpty()) {
-                    return true;
-                }
-                return false;
-            } catch (FileUploadFailedException e) {
-                throw new RuntimeException("Failed to save cargo photos: " + e.getMessage(), e);
-            }
-        }
-        return false;
-    }
 
 
     public List<Cargo> getCargoByUser(Long userId) {
@@ -109,4 +111,8 @@ public class CargoService {
         return cargoRepository.findByStatus(status);
     }
 
+    public List<Cargo> getAllCargosByOwner() {
+        String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cargoRepository.findByOwner_PhoneNumber(phoneNumber);
+    }
 }

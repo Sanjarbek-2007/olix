@@ -58,7 +58,10 @@ public class AuthService {
         }
         return null;
     }
-
+    public JwtResponse refreshToken(User user){
+            String token = jwtProvider.generate(user );
+            return new JwtResponse(token);
+    }
     public CheckUserExistanceResponse checkExistance(CheckUserExistaceDto dto) {
         if(dto.phoneNumber().isEmpty() && dto.email().isEmpty()){
             return new CheckUserExistanceResponse(null, "Please enter a valid phone number or email");

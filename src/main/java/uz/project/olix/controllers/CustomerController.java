@@ -16,7 +16,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("/become/customer")
-    public ResponseEntity<String> becomeCustomer(
+    public ResponseEntity<?> becomeCustomer(
             @ModelAttribute BecomeCustomerDto dto) {
         return customerService.becomeCustomer(dto);
 

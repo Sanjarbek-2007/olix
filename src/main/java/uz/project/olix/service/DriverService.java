@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import uz.project.olix.dto.AddingSuccess;
 import uz.project.olix.dto.BecomeDriverDto;
 import uz.project.olix.entity.Document;
 import uz.project.olix.entity.Role;
@@ -29,6 +30,7 @@ public class DriverService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final TruckService truckService;
+    private final AuthService authService;
 
     public ResponseEntity<?> become(BecomeDriverDto dto) {
         String phoneNumber = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -58,7 +60,9 @@ public class DriverService {
                     userRepository.save(user);
 
                     logger.info("Role DRIVER added to user: {}", user.getPhoneNumber());
-                    return new ResponseEntity<>("Driver added successfully", HttpStatus.OK);
+                    return new ResponseEntity<>(
+                            new AddingSuccess("Successfully added ",authService.refreshToken(user))
+                            , HttpStatus.OK);
                 }
                 logger.error("Problem in adding truck data for user: {}", user.getPhoneNumber());
                 return new ResponseEntity<>("Problem in adding data", HttpStatus.CONFLICT);

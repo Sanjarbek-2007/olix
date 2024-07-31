@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Cargo {
@@ -31,14 +33,23 @@ public class Cargo {
     private String name;
     private double weight;
     private String status;
-    @OneToOne
-    private User owner;
-
     @ManyToOne
-    @JoinColumn(name = "truck_id")
-    private Truck truck;
+    private User owner;
 
     @ManyToMany
     private List<Photo> photos;
 
+    public Cargo(String name, double weight, String status  ) {
+        this.name = name;
+        this.weight = weight;
+        this.status = status;
+
+    }
+
+    public Cargo(String name, String status, User owner, double weight) {
+        this.name = name;
+        this.status = status;
+        this.owner = owner;
+        this.weight = weight;
+    }
 }

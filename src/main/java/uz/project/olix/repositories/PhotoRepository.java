@@ -27,4 +27,13 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO cargo_photos (cargo_id, photos_id) values( :cargoId, :photoId )")
     void addPhotoByPhotoIdAndCargoId(Long photoId, Long cargoId);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "delete from cargo_photos where cargo_id = :cargoId;")
+    void deleteByCargoId(@Param("cargoId") Long cargoId);
+
+
+    @Override
+    void deleteById(Long aLong);
 }
