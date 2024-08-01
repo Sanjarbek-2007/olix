@@ -94,5 +94,13 @@ public class TruckService {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    public ResponseEntity<Truck> findByOwnerId(Long id) {
+        List<Truck> trucks = truckRepository.findByOwnerId(id);
+        if (!trucks.isEmpty()) {
+            return new ResponseEntity<>(trucks.get(0), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 //    public ResponseEntity<?> removeCargo(RemoveCargoDto dto) {}
 }

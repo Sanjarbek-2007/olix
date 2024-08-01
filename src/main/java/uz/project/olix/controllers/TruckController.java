@@ -28,7 +28,10 @@ public class TruckController {
         Optional<Truck> truck = truckService.getTruckById(id);
         return truck.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    @GetMapping("/get-by-user-id/{id}")
+    public ResponseEntity<Truck> getTruckByUserId(@PathVariable Long id) {
+        return truckService.findByOwnerId(id);
+    }
     @PostMapping
     public ResponseEntity<Truck> createTruck(@RequestBody Truck truck) {
         Truck savedTruck = truckService.saveTruck(truck);
