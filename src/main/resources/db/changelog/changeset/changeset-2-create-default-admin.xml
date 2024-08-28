@@ -6,7 +6,58 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <!-- ChangeSet for inserting roles -->
-    <changeSet id="1" author="yournamasdsadasfdszscase">
+    <changeSet id="1" author="yournamasdsafesdgdbxcvcvn65fdszscase">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT 1 FROM users LIMIT 1;
+
+            </sqlCheck>
+
+        </preConditions>
+        <sql>
+            create table users (
+                                   id bigserial primary key ,
+                                   email varchar,
+                                   full_name varchar,
+                                   is_confirmed boolean,
+                                   password varchar,
+                                   phone_number varchar,
+                                   profile_picture varchar,
+                                   username varchar
+            );
+        </sql>
+    </changeSet>
+    <changeSet id="2" author="yourn45hgfsadasfdszscase">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT 1 FROM role LIMIT 1;
+            </sqlCheck>
+
+        </preConditions>
+        <sql>
+            CREATE TABLE role(
+                id bigserial primary key ,
+                name varchar
+            );
+
+        </sql>
+    </changeSet>
+    <changeSet id="3" author="you234324bnmbcbvadasfdszscase">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT 1 FROM users_roles LIMIT 1;
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            CREATE TABLE users_roles(
+                user_id bigint,
+                roles_id bigint
+            );
+
+        </sql>
+    </changeSet>
+    <changeSet id="4" author="yournamasdszxcvadefadasfdszscase">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM role WHERE name = 'USER';
@@ -25,7 +76,7 @@
     </changeSet>
 
     <!-- ChangeSet for inserting users -->
-    <changeSet id="2" author="yournameeeeeeeeeeeeeeeeeeeasddsad">
+    <changeSet id="5" author="yoursadfgsfhgfdgsnameeeeeeeeeeeeeeeeeeeasddsad">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM users WHERE phone_number IN ('+998943607561', '+998974903007');
@@ -34,8 +85,8 @@
         <sql>
             INSERT INTO users (full_name, password, phone_number, username, email)
             VALUES
-                ('Sanjarbek Yuldashev', '1234olix', '+998943607561', 'Yuldashevvv_', 'ineedhotalot@gmail.com'),
-                ('Doniyorbek Xudayarov', '$2a$10$esTTsR22MPPH0A1R//HoIujjDYGKbcNkz0JHyiGWGEbjJxadZhBqu', '+998974903007', 'BeCool', 'doniyorkhudayarov@gmail.com');
+                ('Sanjarbek Yuldashev', '$2a$10$YQl.Fwgw28t5vVDVLsyqc.egSft7blbyrWmwe4cwktL0ZaaKCIRXC', '+998943607561', 'Yuldashevvv_', 'ineedhotalot@gmail.com'),
+                ('Doniyorbek Xudayarov', '$2a$10$YQl.Fwgw28t5vVDVLsyqc.egSft7blbyrWmwe4cwktL0ZaaKCIRXC', '+998974903007', 'BeCool', 'doniyorkhudayarov@gmail.com');
         </sql>
     </changeSet>
 
@@ -73,8 +124,9 @@
     <!--        </sql>-->
     <!--    </changeSet>-->
 
+
     <!-- ChangeSet for inserting into users_roles -->
-    <changeSet id="5" author="yournacxzcxzcxzcme">
+    <changeSet id="6" author="yodfs34urnacxzcxzcxzcme">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM users_roles WHERE user_id = findUserByPhoneNumber('+998943607561') AND roles_id = findRoleByName('ADMIN');
@@ -86,8 +138,10 @@
 --                 (findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'ADMIN')),
 --                 (findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'OWNER')),
 (findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'USER')),
-(findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'ADMIN')),
-(findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'OWNER')),
+(findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'ADMIN')),
+(findUserByPhoneNumber(p_phone_number := '+998943607561'), findRoleByName(n_name := 'OWNER')),
+-- (findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'ADMIN')),
+-- (findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'OWNER')),
 (findUserByPhoneNumber(p_phone_number := '+998974903007'), findRoleByName(n_name := 'USER'));
         </sql>
     </changeSet>
