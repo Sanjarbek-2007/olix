@@ -1,27 +1,28 @@
-//package uz.project.olix.entity;
-//
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
-//import lombok.Data;
-//import lombok.Getter;
-//import lombok.Setter;
-//
-//@Entity
-//@Data
-//@Setter
-//@Getter
-//public class Chat {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @ManyToOne
-//    private User user1;
-//
-//    @ManyToOne
-//    private User user2;
-//}
+package uz.project.olix.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.List;
+
+@Entity
+@Data
+public class Chat {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user1_id", nullable = false)
+    private User user1;
+
+    @ManyToOne
+    @JoinColumn(name = "user2_id", nullable = false)
+    private User user2;
+
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages;
+
+    @Column(nullable = false, unique = true)
+    private String uniqueIdentifier;
+}

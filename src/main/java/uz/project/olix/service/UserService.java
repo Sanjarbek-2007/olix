@@ -44,6 +44,9 @@ public class UserService {
 //    }
 
 
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -115,6 +118,12 @@ public class UserService {
                 .isConfirmed(user.getIsConfirmed())
                 .documents(user.getDocuments())
                 .build();
+    }
+
+
+    public User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
     }
 
 }
